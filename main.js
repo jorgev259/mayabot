@@ -4,7 +4,7 @@ const client = new Discord.Client();
 
 var commands = require("../data/maya.json");
 var config = require("../data/config.json");
-var util = require('../akira/utilities.js');
+var util = require('../akirabot/utilities.js');
 
 client.on('ready', () => {
     console.log('I am ready!');
