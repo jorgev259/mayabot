@@ -42,6 +42,26 @@ client.on('message', message => {
         }else{
             message.reply("The reaction you are trying to remove doesnt exist");
         }
+    }else if(message.content.startsWith("+senpai")){
+        message.delete();
+        if(message.member.roles.find("name","Senpai") != null){
+            if(message.member.roles.find("name","Emperor") == null){
+                message.member.addRole(message.guild.roles.find("name","Emperor"));
+            }else{
+                message.member.removeRole(message.guild.roles.find("name","Emperor"));
+            }
+        }else{
+            message.delete();
+            message.author.send("What do you need help with? (Please reply with only one message)").then(advise => {
+                var collector = advise.channel.createMessageCollector(m => m==m,{max:1});
+                collector.on('collect', m2 => {
+                    advise.delete();
+                    m2.delete();
+                    m2.channel.send("Your request has been sent, please wait patiently");
+                    (message.guild.members.get("194614248511504385").send("Request from " + message.author.username + "\n ```" + m2.content + "```"));
+                });
+            });
+        }
     }else{
         Object.keys(commands).forEach(function(key){
             if(message.content.toLowerCase().includes(key)){
