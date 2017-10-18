@@ -83,11 +83,12 @@ client.on('message', message => {
             break;
 
         default:
+            var attachments = []
             Object.keys(commands).forEach(function(key){
                 if(message.content.toLowerCase().includes(key)){
                     var command = commands[key]
 
-                    message.channel.send("",{files: [command.content[0]]});
+                    attachments.push(new Discord.MessageAttachment(command.content[0]));
                     if(command.content.length>1){
                         var first = command.content[0];
                         for(var i=1;i<command.content.length;i++){
@@ -99,6 +100,10 @@ client.on('message', message => {
                     }
                 }
             })
+
+            if(attachments.length>0){
+                message.channel.send(attachments);
+            }
             break;
     }
 });
