@@ -69,13 +69,16 @@ client.on('message', message => {
 
         case "+marry":
             if(message.mentions.has(client.user)){
-                if(message.mentions.has("305010021954093057")){
-                    message.channel.send("Yes");
-                    message.channel.send("I'll gladly marry you, Kirei")
-                }else{
-                    message.channel.send("No");
-                    message.channel.send("Only Kirei can have my hand");
-                }
+                var collector = message.channel.createMessageCollector(m => m.embeds.length>0,{max:1});
+                collector.on('collect', m => {
+                    if(message.author.id == "305010021954093057"){
+                        m.channel.send("Yes");
+                        m.channel.send("I'll gladly marry you, Kirei")
+                    }else{
+                        m.channel.send("No");
+                        m.channel.send("Only Kirei can have my hand");
+                    }
+                });
             }
             break;
 
