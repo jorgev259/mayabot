@@ -1,5 +1,5 @@
 const Discord = require('discord.js');
-const getter = require('booru-getter')
+const getter = require('booru-fetcher')
 var fs = require("fs");
 const client = new Discord.Client();
 
@@ -90,29 +90,35 @@ client.on('message', message => {
                         var search = param[2];
                         param.splice(0,3);
                         var reason = param.join(" ");
-                        message.edit("Working on it...");
+                        var mprime;
+
+                        message.delete();
+                       message.channel.send("Working on it...").then(m=>mprime=m);
                        getter.getRandom(search, (url)=>{
-                            var author;
-                            if(message.member.nickname == null){
-                                author = message.author.username;
-                            }else{
-                                author = message.member.nickname;
-                            }
+                           if(url !=null){
+                                var author;
+                                if(message.member.nickname == null){
+                                    author = message.author.username;
+                                }else{
+                                    author = message.member.nickname;
+                                }
 
 
-                            const embed = {
-                              "color": 8176039,
-                              "image": {
-                                "url": url
-                              },
-                              "author": {
-                                "name": author,
-                                "icon_url": message.author.displayAvatarURL()
-                              }
-                            };
-                            message.channel.send(reason, { embed }).then(m=>message.delete());
+                                const embed = {
+                                  "color": 8176039,
+                                  "image": {
+                                    "url": url
+                                  },
+                                  "author": {
+                                    "name": author,
+                                    "icon_url": message.author.displayAvatarURL()
+                                  }
+                                };
+                                mprime.edit(reason, { embed });
+                           }else{
+                               mprime.edit("Sorry, couldnt find anything :c");
+                           }
                         });
-
                         break;
                 };
             }else{
