@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const getter = require('booru-getter')
 var fs = require("fs");
 const client = new Discord.Client();
 
@@ -83,27 +84,60 @@ client.on('message', message => {
             break;
 
         default:
-            var attachments = []
-            Object.keys(commands).forEach(function(key){
-                if(message.content.toLowerCase().includes(key)){
-                    var command = commands[key]
+            if(message.mentions.has(client.user)){
+                switch(param[1]){
+                    case "send":
+                        var search = param[2];
+                        param.splice(0,3);
+                        var reason = param.join(" ");
+                       getter.getRandom(search, (url)=>{
+                            var author;
+                            if(message.member.nickname == null){
+                                author = message.author.username;
+                            }else{
+                                author = message.member.nickname;
+                            }
 
-                    attachments.push(new Discord.MessageAttachment(command.content[0]));
-                    if(command.content.length>1){
-                        var first = command.content[0];
-                        for(var i=1;i<command.content.length;i++){
-                            command.content[i-1] = command.content[i];
-                        };
-                        command.content[command.content.length - 1] = first;
-                        commands[key] = command;
-                        util.save(commands,"maya");
+
+                            const embed = {
+                              "color": 8176039,
+                              "image": {
+                                "url": url
+                              },
+                              "author": {
+                                "name": author,
+                                "icon_url": message.author.displayAvatarURL()
+                              }
+                            };
+                            message.channel.send(reason, { embed });
+                        });
+
+                        break;
+                };
+            }else{
+                var attachments = []
+                Object.keys(commands).forEach(function(key){
+                    if(message.content.toLowerCase().includes(key)){
+                        var command = commands[key]
+
+                        attachments.push(new Discord.MessageAttachment(command.content[0]));
+                        if(command.content.length>1){
+                            var first = command.content[0];
+                            for(var i=1;i<command.content.length;i++){
+                                command.content[i-1] = command.content[i];
+                            };
+                            command.content[command.content.length - 1] = first;
+                            commands[key] = command;
+                            util.save(commands,"maya");
+                        }
                     }
-                }
-            })
+                })
 
-            if(attachments.length>0){
-                message.channel.send(attachments);
+                if(attachments.length>0){
+                    message.channel.send(attachments);
+                }
             }
+
             break;
     }
 });
