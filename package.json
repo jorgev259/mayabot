@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "booru-getter": "0.0.2",
     "discord.js": "github:hydrabolt/discord.js"
   }
 }
