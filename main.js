@@ -90,6 +90,7 @@ client.on('message', message => {
                         var search = param[2];
                         param.splice(0,3);
                         var reason = param.join(" ");
+                        message.edit("Working on it...");
                        getter.getRandom(search, (url)=>{
                             var author;
                             if(message.member.nickname == null){
@@ -109,7 +110,7 @@ client.on('message', message => {
                                 "icon_url": message.author.displayAvatarURL()
                               }
                             };
-                            message.channel.send(reason, { embed });
+                            message.channel.send(reason, { embed }).then(m=>message.delete());
                         });
 
                         break;
