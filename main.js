@@ -69,7 +69,7 @@ client.on('message', message => {
             break;
 
         case "+marry":
-            if(message.mentions.has(client.user)){
+            if(message.mentions.users.has(client.user)){
                 var collector = message.channel.createMessageCollector(m => m.embeds.length>0,{max:1});
                 collector.on('collect', m => {
                     if(message.author.id == "305010021954093057"){
@@ -84,7 +84,7 @@ client.on('message', message => {
             break;
 
         default:
-            if(message.mentions.has(client.user)){
+            if(message.mentions.users.has(client.user)){
                 switch(param[1]){
                     case "send":
                         var search = param[2];
@@ -122,12 +122,11 @@ client.on('message', message => {
                         break;
                 };
             }else{
-                var attachments = []
                 Object.keys(commands).forEach(function(key){
                     if(message.content.toLowerCase().includes(key)){
                         var command = commands[key]
 
-                        attachments.push(new Discord.MessageAttachment(command.content[0]));
+                        message.channel.send(new Discord.Attachment(command.content[0]));
                         if(command.content.length>1){
                             var first = command.content[0];
                             for(var i=1;i<command.content.length;i++){
@@ -139,10 +138,6 @@ client.on('message', message => {
                         }
                     }
                 })
-
-                if(attachments.length>0){
-                    message.channel.send(attachments);
-                }
             }
 
             break;
