@@ -3,9 +3,8 @@ const getter = require('booru-fetcher')
 var fs = require("fs");
 const client = new Discord.Client();
 
-var commands = require("../data/maya.json");
-var config = require("../data/config.json");
-var util = require('../akirabot/utilities.js');
+var commands = require("./maya.json");
+//var util = require('../akirabot/utilities.js');
 
 client.on('ready', () => {
     console.log('I am ready!');
@@ -22,7 +21,7 @@ client.on('message', message => {
 
             if(commands[name] != undefined){
                 commands[name].content.push(url);
-                util.save(commands,"maya");
+                //util.save(commands,"maya");
                 message.reply("Command udpated");
             }else{
                 var content = [url];
@@ -31,7 +30,7 @@ client.on('message', message => {
                     "content": content,
                 };
 
-                util.save(commands,"maya");
+                //util.save(commands,"maya");
                 message.reply("Command added");
             }
             break;
