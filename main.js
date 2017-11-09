@@ -133,7 +133,7 @@ client.on('message', message => {
                             };
                             command.content[command.content.length - 1] = first;
                             commands[key] = command;
-                            util.save(commands,"maya");
+                            //util.save(commands,"maya");
                         }
                     }
                 })
