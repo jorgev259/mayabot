@@ -143,4 +143,4 @@ client.on('message', message => {
     }
 });
 
-client.login(config.tokenMaya);
+client.login(proccess.env.token);
