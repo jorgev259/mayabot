@@ -3,9 +3,8 @@ const getter = require('booru-fetcher')
 var fs = require("fs");
 const client = new Discord.Client();
 
-var commands = require("../data/maya.json");
-var config = require("../data/config.json");
-var util = require('../akirabot/utilities.js');
+var commands = require("./maya.json");
+//var util = require('../akirabot/utilities.js');
 
 client.on('ready', () => {
     console.log('I am ready!');
@@ -22,7 +21,7 @@ client.on('message', message => {
 
             if(commands[name] != undefined){
                 commands[name].content.push(url);
-                util.save(commands,"maya");
+                //util.save(commands,"maya");
                 message.reply("Command udpated");
             }else{
                 var content = [url];
@@ -31,7 +30,7 @@ client.on('message', message => {
                     "content": content,
                 };
 
-                util.save(commands,"maya");
+                //util.save(commands,"maya");
                 message.reply("Command added");
             }
             break;
@@ -69,7 +68,7 @@ client.on('message', message => {
             break;
 
         case "+marry":
-            if(message.mentions.has(client.user)){
+            if(message.mentions.users.has(client.user)){
                 var collector = message.channel.createMessageCollector(m => m.embeds.length>0,{max:1});
                 collector.on('collect', m => {
                     if(message.author.id == "305010021954093057"){
@@ -84,7 +83,7 @@ client.on('message', message => {
             break;
 
         default:
-            if(message.mentions.has(client.user)){
+            if(message.mentions.users.has(client.user)){
                 switch(param[1]){
                     case "send":
                         var search = param[2];
@@ -122,12 +121,11 @@ client.on('message', message => {
                         break;
                 };
             }else{
-                var attachments = []
                 Object.keys(commands).forEach(function(key){
                     if(message.content.toLowerCase().includes(key)){
                         var command = commands[key]
 
-                        attachments.push(new Discord.MessageAttachment(command.content[0]));
+                        message.channel.send(new Discord.Attachment(command.content[0]));
                         if(command.content.length>1){
                             var first = command.content[0];
                             for(var i=1;i<command.content.length;i++){
@@ -135,18 +133,14 @@ client.on('message', message => {
                             };
                             command.content[command.content.length - 1] = first;
                             commands[key] = command;
-                            util.save(commands,"maya");
+                            //util.save(commands,"maya");
                         }
                     }
                 })
-
-                if(attachments.length>0){
-                    message.channel.send(attachments);
-                }
             }
 
             break;
     }
 });
 
-client.login(config.tokenMaya);
+client.login(process.env.token);
